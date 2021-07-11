@@ -167,7 +167,8 @@ function prevBtn() {
     prevSearchBtn.textContent = prevSearchArray[i];
     prevSearchBtn.classList.add('btn', 'btn-dark', 'justify-space-between');
 
-    prevSearchBtnEl.append(prevSearchBtn)
+    prevSearchBtnEl.append(prevSearchBtn);
+    prevSearchBtnEl.addEventListener('click', prevCityChosen)
   }
 }
 
@@ -183,7 +184,7 @@ $(document).ready(function () {
       prevSearchBtn.textContent = prevSearchArray[i];
       prevSearchBtn.classList.add('btn', 'btn-dark', 'justify-space-between', i);
 
-      prevSearchBtnEl.append(prevSearchBtn)
+      prevSearchBtnEl.append(prevSearchBtn);
 
       prevSearchBtnEl.addEventListener('click', prevCityChosen)
     }
