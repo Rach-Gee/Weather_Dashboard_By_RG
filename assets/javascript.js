@@ -1,3 +1,4 @@
+//Global Variables 
 var resultContentEl = document.getElementById('weather-container');
 var forecastEl = document.getElementById('forecast-container');
 var searchBtn = document.getElementById('btn');
@@ -8,7 +9,7 @@ var apiKey = 'd3975cb6a831a386713ebf67ed1e5363';
 var cityNameChosen = ''
 var dateMoment = moment().format('DD/MM/YYYY')
 
-
+//function to fetch open weather map API using the input from the end user
 function searchApi(cityName) {
   if (cityName) {
     var locQueryUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
@@ -26,7 +27,7 @@ function searchApi(cityName) {
       cityNameChosen = data.name
       console.log(cityNameChosen);
       weatherApi()
-
+//function to fetch open weather map API using the lon and lat from earlier API call
       function weatherApi() {
         var apiUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=metric&appid=' + apiKey;
 
@@ -42,12 +43,11 @@ function searchApi(cityName) {
       }
     });
 }
-
+//Passing end user search to the API fetch function
 function handleSearchFormSubmit(event) {
   event.preventDefault();
 
   var cityInputVal = document.getElementById('city-input').value;
-
 
   if (!cityInputVal) {
     console.error('You need a search input value!');
@@ -59,11 +59,14 @@ function handleSearchFormSubmit(event) {
 
 document.getElementById('user-form').addEventListener('submit', handleSearchFormSubmit)
 
+//rendering results for current days on page 
 function printResults(resultObj) {
   console.log(resultObj);
   resultContentEl.innerHTML = ''
 
+  //creating element
   var resultCard = document.createElement('div');
+  //adding classes
   resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
 
   var resultBody = document.createElement('div');
@@ -90,6 +93,7 @@ function printResults(resultObj) {
   var uvContentEl = document.createElement('p');
   uvContentEl.innerHTML = 'UV Index: ';
 
+  //adding class to UV rating depending on severity
   var uviEl = document.createElement('span');
   if (resultObj.current.uvi < 3) {
     uviEl.classList.add('low')
@@ -101,14 +105,14 @@ function printResults(resultObj) {
   uviEl.innerHTML = resultObj.current.uvi;
   uvContentEl.append(uviEl)
 
+  //appending data to the page
   resultBody.append(titleEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl, uvContentEl);
-
   resultContentEl.append(resultCard);
 
   prevBtn()
 }
 
-
+//rendering results for forecasted 5 days on page 
 function printForecastResults(resultObj) {
   forecastEl.innerHTML = ''
   forecastH1El.classList.remove("hide")
@@ -139,12 +143,13 @@ function printForecastResults(resultObj) {
     var humidityContentEl = document.createElement('p');
     humidityContentEl.innerHTML = 'Humidity: ' + resultObj.daily[i].humidity + '%';
 
+    //appending data to the page
     resultBody.append(titleEl, imgEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl);
-
     forecastEl.append(resultCard);
   }
 }
 
+//adding pervious searches to aside tag in HTML
 function prevBtn() {
   var prevSearchBtn = document.createElement('button');
 
@@ -168,27 +173,28 @@ function prevBtn() {
 
 // Load data from local storage
 $(document).ready(function () {
-  var prevSearchBtn = document.createElement('button');
 
   var prevSearchArray = JSON.parse(localStorage.getItem("prevSearchCity"));
   if (prevSearchArray) {
     localStorage.setItem("prevSearchCity", JSON.stringify(prevSearchArray));
-    prevSearchBtn.textContent = JSON.parse(localStorage.getItem("prevSearchArray"));
 
     for (var i = 0; i < prevSearchArray.length; i++) {
+      var prevSearchBtn = document.createElement('button');
       prevSearchBtn.textContent = prevSearchArray[i];
       prevSearchBtn.classList.add('btn', 'btn-dark', 'justify-space-between', i);
 
       prevSearchBtnEl.append(prevSearchBtn)
+
+      prevSearchBtnEl.addEventListener('click', prevCityChosen)
     }
   }
 });
 
-prevSearchBtn.addEventListener('click', prevCityChosen)
-
-function prevCityChosen () {
-  cityName = prevSearchArray 
-  searchApi()
+//making the pervious searches avalible to the searchApi function so these buttons are now interactive
+function prevCityChosen(e) {
+  e.target.innerText
+  console.dir(e.target)
+  searchApi(e.target.innerText)
 }
 
 
