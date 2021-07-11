@@ -3,6 +3,7 @@ var forecastEl = document.getElementById('forecast-container');
 var searchBtn = document.getElementById('btn');
 var resultTextEl = document.getElementById('city-name');
 var forecastH1El = document.getElementById('forecastH1');
+var prevSearchBtnEl = document.getElementById('prevSearchBtns');
 var apiKey = 'd3975cb6a831a386713ebf67ed1e5363';
 var cityNameChosen = ''
 var dateMoment = moment().format('DD/MM/YYYY')
@@ -101,8 +102,10 @@ function printResults(resultObj) {
   uvContentEl.append(uviEl)
 
   resultBody.append(titleEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl, uvContentEl);
-  
+
   resultContentEl.append(resultCard);
+
+  prevBtn()
 }
 
 
@@ -142,10 +145,51 @@ function printForecastResults(resultObj) {
   }
 }
 
+function prevBtn() {
+  var prevSearchBtn = document.createElement('button');
 
+  var prevSearchArray = JSON.parse(localStorage.getItem("prevSearchCity"));
+  if (prevSearchArray == null) {
+    prevSearchArray = []
+  }
+  response = cityNameChosen;
+  prevSearchArray.push(response);
+  console.log(prevSearchArray);
+  localStorage.setItem("prevSearchCity", JSON.stringify(prevSearchArray));
+  prevSearchBtn.textContent = JSON.parse(localStorage.getItem("prevSearchArray"));
 
+  for (var i = 0; i < prevSearchArray.length; i++) {
+    prevSearchBtn.textContent = prevSearchArray[i];
+    prevSearchBtn.classList.add('btn', 'btn-dark', 'justify-space-between');
 
+    prevSearchBtnEl.append(prevSearchBtn)
+  }
+}
 
+// Load data from local storage
+$(document).ready(function () {
+  var prevSearchBtn = document.createElement('button');
+
+  var prevSearchArray = JSON.parse(localStorage.getItem("prevSearchCity"));
+  if (prevSearchArray) {
+    localStorage.setItem("prevSearchCity", JSON.stringify(prevSearchArray));
+    prevSearchBtn.textContent = JSON.parse(localStorage.getItem("prevSearchArray"));
+
+    for (var i = 0; i < prevSearchArray.length; i++) {
+      prevSearchBtn.textContent = prevSearchArray[i];
+      prevSearchBtn.classList.add('btn', 'btn-dark', 'justify-space-between', i);
+
+      prevSearchBtnEl.append(prevSearchBtn)
+    }
+  }
+});
+
+prevSearchBtn.addEventListener('click', prevCityChosen)
+
+function prevCityChosen () {
+  cityName = prevSearchArray 
+  searchApi()
+}
 
 
 
