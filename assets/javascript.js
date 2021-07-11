@@ -10,7 +10,7 @@ var dateMoment = moment().format('DD/MM/YYYY')
 
 function searchApi(cityName) {
   if (cityName) {
-    var locQueryUrl = 'https:api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
+    var locQueryUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
   }
 
   fetch(locQueryUrl, {
@@ -73,13 +73,13 @@ function printResults(resultObj) {
   titleEl.textContent = cityNameChosen + ' (' + dateMoment + ')'
 
   var imgEl = document.createElement('img');
-  imgEl.src = ("http://openweathermap.org/img/w/" + resultObj.current.weather[0].icon  + ".png")
+  imgEl.src = ("http://openweathermap.org/img/w/" + resultObj.current.weather[0].icon + ".png")
 
   titleEl.append(imgEl)
 
   var tempContentEl = document.createElement('p');
   tempContentEl.innerHTML = 'Temp: ' + resultObj.current.temp + ' °C';
-  
+
   var windContentEl = document.createElement('p');
   windContentEl.innerHTML = 'Wind: ' + resultObj.current.wind_speed + ' MPH';
 
@@ -90,7 +90,7 @@ function printResults(resultObj) {
   uvContentEl.innerHTML = 'UV Index: ';
 
   var uviEl = document.createElement('span');
-  if(resultObj.current.uvi < 3) {
+  if (resultObj.current.uvi < 3) {
     uviEl.classList.add('low')
   } else if (resultObj.current.uvi >= 3 < 7) {
     uviEl.classList.add('mod')
@@ -100,9 +100,9 @@ function printResults(resultObj) {
   uviEl.innerHTML = resultObj.current.uvi;
   uvContentEl.append(uviEl)
 
-resultBody.append(titleEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl, uvContentEl);
-
-resultContentEl.append(resultCard);
+  resultBody.append(titleEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl, uvContentEl);
+  
+  resultContentEl.append(resultCard);
 }
 
 
@@ -111,35 +111,36 @@ function printForecastResults(resultObj) {
   forecastH1El.classList.remove("hide")
   for (var i = 1; i < 6; i++) {
 
-  var dateMoment1 = moment().add(i, 'd');
-  var dateMoment1format = dateMoment1.format('DD/MM/YYYY')
+    var dateMoment1 = moment().add(i, 'd');
+    var dateMoment1format = dateMoment1.format('DD/MM/YYYY')
 
-  var resultCard = document.createElement('div');
-  resultCard.classList.add('forecast');
+    var resultCard = document.createElement('div');
+    resultCard.classList.add('forecast');
 
-  var resultBody = document.createElement('div');
-  resultBody.classList.add('card-body');
-  resultCard.append(resultBody);
+    var resultBody = document.createElement('div');
+    resultBody.classList.add('card-body');
+    resultCard.append(resultBody);
 
-  var titleEl = document.createElement('h3');
-  titleEl.textContent = dateMoment1format
+    var titleEl = document.createElement('h3');
+    titleEl.textContent = dateMoment1format
 
-  var imgEl = document.createElement('img');
-  imgEl.src = ("http://openweathermap.org/img/w/" + resultObj.daily[i].weather[0].icon  + ".png")
+    var imgEl = document.createElement('img');
+    imgEl.src = ("http://openweathermap.org/img/w/" + resultObj.daily[i].weather[0].icon + ".png")
 
-  var tempContentEl = document.createElement('p');
-  tempContentEl.innerHTML = 'Max Temp: ' + resultObj.daily[i].temp.max + ' °C';
-  
-  var windContentEl = document.createElement('p');
-  windContentEl.innerHTML = 'Wind: ' + resultObj.daily[i].wind_speed + ' MPH';
+    var tempContentEl = document.createElement('p');
+    tempContentEl.innerHTML = 'Max Temp: ' + resultObj.daily[i].temp.max + ' °C';
 
-  var humidityContentEl = document.createElement('p');
-  humidityContentEl.innerHTML = 'Humidity: ' + resultObj.daily[i].humidity + '%';
+    var windContentEl = document.createElement('p');
+    windContentEl.innerHTML = 'Wind: ' + resultObj.daily[i].wind_speed + ' MPH';
 
-resultBody.append(titleEl,imgEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl);
+    var humidityContentEl = document.createElement('p');
+    humidityContentEl.innerHTML = 'Humidity: ' + resultObj.daily[i].humidity + '%';
 
-forecastEl.append(resultCard);
-}}
+    resultBody.append(titleEl, imgEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl);
+
+    forecastEl.append(resultCard);
+  }
+}
 
 
 
