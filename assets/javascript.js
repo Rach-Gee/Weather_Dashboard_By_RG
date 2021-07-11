@@ -74,7 +74,7 @@ function printResults(resultObj) {
   titleEl.textContent = cityNameChosen + ' (' + dateMoment + ')'
 
   var imgEl = document.createElement('img');
-  imgEl.src = ("http://openweathermap.org/img/w/" + resultObj.current.weather[0].icon + ".png")
+  imgEl.src = ("https://openweathermap.org/img/w/" + resultObj.current.weather[0].icon + ".png")
 
   titleEl.append(imgEl)
 
@@ -128,7 +128,7 @@ function printForecastResults(resultObj) {
     titleEl.textContent = dateMoment1format
 
     var imgEl = document.createElement('img');
-    imgEl.src = ("http://openweathermap.org/img/w/" + resultObj.daily[i].weather[0].icon + ".png")
+    imgEl.src = ("https://openweathermap.org/img/w/" + resultObj.daily[i].weather[0].icon + ".png")
 
     var tempContentEl = document.createElement('p');
     tempContentEl.innerHTML = 'Max Temp: ' + resultObj.daily[i].temp.max + ' °C';
