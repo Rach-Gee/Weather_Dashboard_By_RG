@@ -10,7 +10,7 @@ var cityNameChosen = ''
 var dateMoment = moment().format('DD/MM/YYYY')
 
 //function to fetch open weather map API using the input from the end user
-function searchApi(cityName) {
+function searchApi(cityName, btnAppend) {
   if (cityName) {
     var locQueryUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
   }
@@ -27,7 +27,7 @@ function searchApi(cityName) {
       cityNameChosen = data.name
       console.log(cityNameChosen);
       weatherApi()
-//function to fetch open weather map API using the lon and lat from earlier API call
+      //function to fetch open weather map API using the lon and lat from earlier API call
       function weatherApi() {
         var apiUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=metric&appid=' + apiKey;
 
@@ -37,7 +37,7 @@ function searchApi(cityName) {
             return response.json();
           })
           .then(function (data) {
-            printResults(data)
+            printResults(data, btnAppend)
             printForecastResults(data)
           });
       }
@@ -54,13 +54,13 @@ function handleSearchFormSubmit(event) {
     return;
   }
 
-  searchApi(cityInputVal);
+  searchApi(cityInputVal, true);
 }
 
 document.getElementById('user-form').addEventListener('submit', handleSearchFormSubmit)
 
 //rendering results for current days on page 
-function printResults(resultObj) {
+function printResults(resultObj, btnAppend) {
   console.log(resultObj);
   resultContentEl.innerHTML = ''
 
@@ -109,7 +109,7 @@ function printResults(resultObj) {
   resultBody.append(titleEl, tempContentEl, tempContentEl, windContentEl, humidityContentEl, uvContentEl);
   resultContentEl.append(resultCard);
 
-  prevBtn()
+  prevBtn(btnAppend)
 }
 
 //rendering results for forecasted 5 days on page 
@@ -150,7 +150,8 @@ function printForecastResults(resultObj) {
 }
 
 //adding pervious searches to aside tag in HTML
-function prevBtn() {
+function prevBtn(btnAppend) {
+  console.log(btnAppend)
   var prevSearchBtn = document.createElement('button');
 
   var prevSearchArray = JSON.parse(localStorage.getItem("prevSearchCity"));
@@ -158,10 +159,14 @@ function prevBtn() {
     prevSearchArray = []
   }
   response = cityNameChosen;
-  prevSearchArray.push(response);
-  console.log(prevSearchArray);
-  localStorage.setItem("prevSearchCity", JSON.stringify(prevSearchArray));
+
+  if (btnAppend) {
+    prevSearchArray.push(response);
+    localStorage.setItem("prevSearchCity", JSON.stringify(prevSearchArray));
+    console.log(prevSearchArray);
+
   prevSearchBtn.textContent = JSON.parse(localStorage.getItem("prevSearchArray"));
+
 
   for (var i = 0; i < prevSearchArray.length; i++) {
     prevSearchBtn.textContent = prevSearchArray[i];
@@ -169,7 +174,7 @@ function prevBtn() {
 
     prevSearchBtnEl.append(prevSearchBtn);
     prevSearchBtnEl.addEventListener('click', prevCityChosen)
-  }
+  }}
 }
 
 // Load data from local storage
@@ -195,7 +200,7 @@ $(document).ready(function () {
 function prevCityChosen(e) {
   e.target.innerText
   console.dir(e.target)
-  searchApi(e.target.innerText)
+  searchApi(e.target.innerText, false)
 }
 
 
